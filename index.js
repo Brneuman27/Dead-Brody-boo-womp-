@@ -1,4 +1,4 @@
-//https://portal.codewithus.com/student/lectures/JavaScript/10
+//https://portal.codewithus.com/student/lectures/JavaScript/10    1-15
 
 //Variables
 
@@ -9,6 +9,7 @@ function setup() {
 
 function draw() {
     background(0);
+    Image(playerImages, 150, 250, 50, 50);
 }
 
 //Other Functions
