@@ -9,7 +9,8 @@ function setup() {
 
 function draw() {
     background(0);
-    Image(playerImages, 150, 250, 50, 50);
+    //Image(playerImages, 150, 250, 50, 50);
+    Image(playerImage, 150, 250, 50, 50);
 }
 
 //Other Functions

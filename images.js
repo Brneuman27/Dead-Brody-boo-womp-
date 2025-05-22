@@ -1,5 +1,5 @@
 // let playerImages = []
-let playerimage;
+let playerImage;
 
 function preload() {
     // playerImages.push(loadImages("br.png"));
