@@ -1,4 +1,4 @@
-//https://portal.codewithus.com/student/lectures/JavaScript/10    2-10
+//https://portal.codewithus.com/student/lectures/JavaScript/10    2-16
 
 //Variables
 let player;
@@ -9,12 +9,19 @@ function setup() {
     createCanvas(500, 500);
     player = new Player();
     projectiles = new Projectile(250, 450);
+    projectiles2 = []
 }
 
 function draw() {
     background(0);
     player.update();
+    projectiles2 = projectiles2.filter((p) => {
+        return p.y > -p.h && p.x > -p.w && p.x < 500 && p.y < 500; 
+    });
     projectiles.update();
+    for(let p of projectiles2) {
+        p.update();
+    }
 }
 
 //Other Functions
@@ -64,9 +71,18 @@ class Player {
         }
     }
 
+    shoot() {
+        if(register[32]) {
+            //player's x position plus half the player's width and then minus half the projectile's width (20 / 2 === 10)
+            let x = 
+            projectiles.push(new Projectile(x, this.y));
+        }
+    }
+
     update() {
         this.draw();
         this.move();
+        this.shoot();
     }
 }
 
@@ -108,9 +124,7 @@ class Projectile {
     }
 
     move() {
-        if(register[32]) { //holding down space, fix it
             this.y -= this.speed;
-        }
     }
 
     update() {
