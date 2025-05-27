@@ -78,6 +78,7 @@ class Player {
         if(register[32]) {
             let x = this.x + this.w/2 - 10;
             projectiles.push(new Projectile(x, this.y));
+            this.canShoot = false;
         }
     }
     else {
@@ -85,7 +86,7 @@ class Player {
             this.canShoot = true;
             this.shootTimer = 0;
         } else {
-            this.shootTimer += 1;
+            this.shootTimer ++;
         }
     }
 }
