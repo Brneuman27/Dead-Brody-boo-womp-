@@ -1,4 +1,4 @@
-//https://portal.codewithus.com/student/lectures/JavaScript/10    2-16
+//https://portal.codewithus.com/student/lectures/JavaScript/10    2-18
 
 //Variables
 let player;
@@ -8,18 +8,16 @@ let projectiles;
 function setup() {
     createCanvas(500, 500);
     player = new Player();
-    projectiles = new Projectile(250, 450);
-    projectiles2 = []
+    projectiles = [];
 }
 
 function draw() {
     background(0);
     player.update();
-    projectiles2 = projectiles2.filter((p) => {
+    projectiles = projectiles.filter((p) => {
         return p.y > -p.h && p.x > -p.w && p.x < 500 && p.y < 500; 
     });
-    projectiles.update();
-    for(let p of projectiles2) {
+    for(let p of projectiles) {
         p.update();
     }
 }
@@ -50,6 +48,10 @@ class Player {
         this.h = 50;
 
         this.speed = 5;
+
+        this.canShoot = true;
+        this.shootTimer = 0;
+        this.shootRate = 10;
     }
     draw() {
         image(playerImage, this.x, this.y, this.w, this.h);
@@ -72,13 +74,21 @@ class Player {
     }
 
     shoot() {
+        if(this.canShoot = true){
         if(register[32]) {
-            //player's x position plus half the player's width and then minus half the projectile's width (20 / 2 === 10)
-            let x = 
+            let x = this.x + this.w/2 - 10;
             projectiles.push(new Projectile(x, this.y));
         }
     }
-
+    else {
+        if(this.shootTimer == this.shootRate){
+            this.canShoot = true;
+            this.shootTimer = 0;
+        } else {
+            this.shootTimer += 1;
+        }
+    }
+}
     update() {
         this.draw();
         this.move();
@@ -87,7 +97,7 @@ class Player {
 }
 
 //input.js
-let register = {};
+const register = {};
 
 function keyPressed() {
     register[keyCode] = true;
