@@ -36,7 +36,7 @@ function preload() {
     // playerImages.push(loadImages("mi.png"));
     // playerImages.push(loadImages("ma.png"));
 
-    playerImage = loadImage("br.png")
+    playerImage = loadImage("https://github.com/Brneuman27/Dead-Brody-boo-womp-/blob/main/br.png?raw=true")
 }
 
 //player.js
@@ -74,7 +74,7 @@ class Player {
     }
 
     shoot() {
-        if(this.canShoot = true){
+        if(this.canShoot == true){
         if(register[32]) {
             let x = this.x + this.w/2 - 10;
             projectiles.push(new Projectile(x, this.y));
