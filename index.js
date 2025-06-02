@@ -1,14 +1,16 @@
-//https://portal.codewithus.com/student/lectures/JavaScript/10    2-18
+//https://portal.codewithus.com/student/lectures/JavaScript/10    3-8(enemy randomiser), 3-11(current step)
 
 //Variables
 let player;
 let projectiles;
+let enemies
 
 //Main Functions
 function setup() {
     createCanvas(500, 500);
     player = new Player();
     projectiles = [];
+    enemies = [];
 }
 
 function draw() {
@@ -20,13 +22,16 @@ function draw() {
     for(let p of projectiles) {
         p.update();
     }
+    for(e of enemies) {
+        e.update();
+    }
 }
 
 //Other Functions
 
 //images.js
 // let playerImages = []
-let playerImage;
+let br, mi, re, sp, ed, ma;
 
 function preload() {
     // playerImages.push(loadImages("br.png"));
@@ -36,7 +41,12 @@ function preload() {
     // playerImages.push(loadImages("mi.png"));
     // playerImages.push(loadImages("ma.png"));
 
-    playerImage = loadImage("https://github.com/Brneuman27/Dead-Brody-boo-womp-/blob/main/br.png?raw=true")
+    br = loadImage("br.png")
+    mi = loadImage("mi.png")
+    re = loadImage("re.png")
+    sp = loadImage("sp.png")
+    ed = loadImage("ed.png")
+    ma = loadImage("ma.png")
 }
 
 //player.js
@@ -54,7 +64,7 @@ class Player {
         this.shootRate = 10;
     }
     draw() {
-        image(playerImage, this.x, this.y, this.w, this.h);
+        image(br, this.x, this.y, this.w, this.h);
         //images(playerImage, this.x, this.y, this.w, this.h);
     }
 
@@ -141,5 +151,32 @@ class Projectile {
     update() {
         this.draw();
         this.move();
+    }
+}
+
+//enemies.js
+class Enemy {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+
+        this.w = 20;
+        this.h = 20;
+
+        this.speed = 7;
+    }
+
+    draw() {
+        image(re, this.x, this.y, this.w, this.h);
+    }
+
+    move() {
+        this.y += this.speed
+    }
+
+    update() {
+        this.draw();
+        this.move();
+        this.shoot();
     }
 }
