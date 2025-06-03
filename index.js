@@ -1,4 +1,4 @@
-//https://portal.codewithus.com/student/lectures/JavaScript/10    3-8(enemy randomiser)&4-9(random bullet), 4-_(current step)
+//https://portal.codewithus.com/student/lectures/JavaScript/10    3-8(enemy randomiser)&4-9(random bullet), 4-17(current step)
 
 //Variables
 let player;
@@ -162,7 +162,7 @@ class Projectile {
             textAlign(CENTER, CENTER);
             text("|", this.x, this.y, this.w, this.h);
         }
-        if(this.type == "strafer") {
+        if(this.type == "strafer" || this.type == "bomber") {
             image(brod, this.x, this.y, this.w, this.h);
         }
     }
@@ -173,6 +173,9 @@ class Projectile {
         }
         if(this.type == "strafer") {
             this.y += this.speed
+        }
+        if(this.type == "bomber") {
+            this.x += this.speed
         }
     }
 
@@ -221,9 +224,21 @@ class Enemy {
     }
 
     shoot() {
-        let x = this.x + (this.w/2) - 10;
-        let y = this.y + this.h;
-        projectiles.push(new Projectile(x, y, "strafer"));
+        if(this.type = "strafer") {
+            let x = this.x + (this.w/2) - 10;
+            let y = this.y + this.h;
+            projectiles.push(new Projectile(x, y, "strafer"));
+        }
+        if(this.type == "bomber") {
+            let x1 = this.x - 20;
+            let y = this.y + (this.h/2) - 10
+            let p = new Projectile(x1, y, "bomber");
+            p.speed = abs(p.speed) * -1;
+            projectiles.push(p);
+
+            let x2 = this.x + 20;
+            projectiles.push(new Projectiles(x2, y, "bomber"));
+        }
     }
 
     update() {
