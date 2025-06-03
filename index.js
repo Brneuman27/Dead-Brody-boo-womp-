@@ -1,4 +1,4 @@
-//https://portal.codewithus.com/student/lectures/JavaScript/10    3-8(enemy randomiser), 3-11(current step)
+//https://portal.codewithus.com/student/lectures/JavaScript/10    3-8(enemy randomiser)&4-9(random bullet), 4-_(current step)
 
 //Variables
 let player;
@@ -16,7 +16,7 @@ function setup() {
 
 function draw() {
     background(0);
-    checkLevel;
+    checkLevel();
     player.update();
     projectiles = projectiles.filter((p) => {
         return p.y > -p.h && p.x > -p.w && p.x < 500 && p.y < 500; 
@@ -34,14 +34,19 @@ function checkLevel() {
     if(enemies.length === 0) {
         level += 1;
         for(let i = 0; i < level; i++) {
-            enemies.push(new Enemy(random(0, 450), -100));
+            let coinFlip = round(random(0, 1));
+            if(coinFlip === 0) {
+            enemies.push(new Enemy(random(0, 450), -100, "bomber"));
+            } else {
+                enemies.push(new Enemy(600, random(0, 350), "strafer"));
+            }
         }
     }
 }
 
 //images.js
 // let playerImages = []
-let br, mi, re, sp, ed, ma;
+let br, mi, re, sp, ed, ma, brod;
 
 function preload() {
     // playerImages.push(loadImages("br.png"));
@@ -57,6 +62,7 @@ function preload() {
     sp = loadImage("sp.png")
     ed = loadImage("ed.png")
     ma = loadImage("ma.png")
+    brod = loadImage("brod.png")
 }
 
 //player.js
@@ -97,7 +103,7 @@ class Player {
         if(this.canShoot == true){
         if(register[32]) {
             let x = this.x + this.w/2 - 10;
-            projectiles.push(new Projectile(x, this.y));
+            projectiles.push(new Projectile(x, this.y, "starfer"));
             this.canShoot = false;
         }
     }
@@ -136,9 +142,11 @@ window.addEventListener("keydown", function(e) {
 
 //projectile.js
 class Projectile {
-    constructor(x, y) {
+    constructor(x, y, type) {
         this.x = x;
         this.y = y;
+
+        this.type = type;
 
         this.w = 20;
         this.h = 20;
@@ -147,15 +155,25 @@ class Projectile {
     }
 
     draw() {
-        fill(255, 0, 0);
-        stroke(255, 0, 0);
-        textSize(18);
-        textAlign(CENTER, CENTER);
-        text("|", this.x, this.y, this.w, this.h);
+        if(this.type == "player") {
+            fill(255, 0, 0);
+            stroke(255, 0, 0);
+            textSize(18);
+            textAlign(CENTER, CENTER);
+            text("|", this.x, this.y, this.w, this.h);
+        }
+        if(this.type == "strafer") {
+            image(this.image, this.x, this.y, this.w, this.h);
+        }
     }
 
     move() {
+        if(this.type == "player") {
             this.y -= this.speed;
+        }
+        if(this.type == "starfer") {
+            this.y += this.speed
+        }
     }
 
     update() {
@@ -166,9 +184,11 @@ class Projectile {
 
 //enemies.js
 class Enemy {
-    constructor(x, y) {
+    constructor(x, y, type) {
         this.x = x;
         this.y = y;
+
+        this.type = type;
 
         this.w = 20;
         this.h = 20;
@@ -181,7 +201,29 @@ class Enemy {
     }
 
     move() {
-        this.y += this.speed
+        if(this.type == "bomber") {
+            this.y += this.speed
+            if(this.y > 500) {
+                this.y = -100;
+                this.x = random(0, 450);
+            }
+                
+        }
+        if(this.type == "strafer") {
+            this.x += this.speed;
+            if(this.x >= 500) {
+                this.speed = -7
+            }
+            if(this.x <= 0) {
+                this.speed = 7
+            }
+        }
+    }
+
+    shoot() {
+        let x = this.x + (this.w/2) - 10;
+        let y = this.y + this.h;
+        projectiles.push(new Projectile(x,y));
     }
 
     update() {
