@@ -103,7 +103,7 @@ class Player {
         if(this.canShoot == true){
         if(register[32]) {
             let x = this.x + this.w/2 - 10;
-            projectiles.push(new Projectile(x, this.y, "starfer"));
+            projectiles.push(new Projectile(x, this.y, "player"));
             this.canShoot = false;
         }
     }
@@ -163,7 +163,7 @@ class Projectile {
             text("|", this.x, this.y, this.w, this.h);
         }
         if(this.type == "strafer") {
-            image(this.image, this.x, this.y, this.w, this.h);
+            image(brod, this.x, this.y, this.w, this.h);
         }
     }
 
@@ -171,7 +171,7 @@ class Projectile {
         if(this.type == "player") {
             this.y -= this.speed;
         }
-        if(this.type == "starfer") {
+        if(this.type == "strafer") {
             this.y += this.speed
         }
     }
@@ -223,7 +223,7 @@ class Enemy {
     shoot() {
         let x = this.x + (this.w/2) - 10;
         let y = this.y + this.h;
-        projectiles.push(new Projectile(x,y));
+        projectiles.push(new Projectile(x, y, "strafer"));
     }
 
     update() {
