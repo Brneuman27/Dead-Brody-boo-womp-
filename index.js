@@ -3,18 +3,20 @@
 //Variables
 let player;
 let projectiles;
-let enemies
+let enemies;
+let level = 0;
 
 //Main Functions
 function setup() {
     createCanvas(500, 500);
     player = new Player();
     projectiles = [];
-    enemies = [];
+    enemies = [];    
 }
 
 function draw() {
     background(0);
+    checkLevel;
     player.update();
     projectiles = projectiles.filter((p) => {
         return p.y > -p.h && p.x > -p.w && p.x < 500 && p.y < 500; 
@@ -28,6 +30,14 @@ function draw() {
 }
 
 //Other Functions
+function checkLevel() {
+    if(enemies.length === 0) {
+        level += 1;
+        for(let i = 0; i < level; i++) {
+            enemies.push(new Enemy(random(0, 450), -100));
+        }
+    }
+}
 
 //images.js
 // let playerImages = []
