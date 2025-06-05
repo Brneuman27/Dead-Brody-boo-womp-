@@ -1,4 +1,4 @@
-//https://portal.codewithus.com/student/lectures/JavaScript/10    3-8(enemy randomiser)&4-9(random bullet), 4-17(current step)
+//https://portal.codewithus.com/student/lectures/JavaScript/10    4-17(current step)
 
 //Variables
 let player;
@@ -24,7 +24,7 @@ function draw() {
     for(let p of projectiles) {
         p.update();
     }
-    for(e of enemies) {
+    for(let e of enemies) {
         e.update();
     }
 }
@@ -36,7 +36,7 @@ function checkLevel() {
         for(let i = 0; i < level; i++) {
             let coinFlip = round(random(0, 1));
             if(coinFlip === 0) {
-            enemies.push(new Enemy(random(0, 450), -100, "bomber"));
+            enemies.push(new Enemy(random(0, 450), +100, "bomber"));
             } else {
                 enemies.push(new Enemy(600, random(0, 350), "strafer"));
             }
@@ -228,7 +228,7 @@ class Enemy {
     }
 
     shoot() {
-        if(this.type = "strafer") {
+        if(this.type == "strafer") {
             let x = this.x + (this.w/2) - 10;
             let y = this.y + this.h;
             projectiles.push(new Projectile(x, y, "strafer"));
@@ -241,7 +241,7 @@ class Enemy {
             projectiles.push(p);
 
             let x2 = this.x + 20;
-            projectiles.push(new Projectiles(x2, y, "bomber"));
+            projectiles.push(new Projectile(x2, y, "bomber"));
         }
     }
 
