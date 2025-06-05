@@ -1,4 +1,4 @@
-//https://portal.codewithus.com/student/lectures/JavaScript/10    3-8(enemy randomiser)&4-9(random bullet), 4-17(current step)
+//https://portal.codewithus.com/student/lectures/JavaScript/10    5-
 
 //Variables
 let player;
@@ -14,7 +14,7 @@ function setup() {
     enemies = [];   
     let test = new Projectile(250, 0, "strafer");
     test.speed = 0.1;
-    projectiles.push(text);
+    projectiles.push(test);
 }
 
 function draw() {
@@ -36,12 +36,13 @@ function draw() {
 //Other Functions
 function checkCollision() {
     for(let p of projectiles) {
-        if(collision(player, p)) {
+        if(p.type !== "player" && collision(player, p)) {
             fill(255);
             noStroke();
             textSize(72);
             textAlign(CENTER, CENTER);
             text("GAME OVER", 250, 250);
+            noLoop();
         }
     }
 }
@@ -90,6 +91,8 @@ function preload() {
     ed = loadImage("ed.png")
     ma = loadImage("ma.png")
     brod = loadImage("brod.png")
+
+    enemyImages = [mi, re, sp, ed, ma];
 }
 
 //player.js
@@ -231,13 +234,29 @@ class Enemy {
         this.h = 20;
 
         this.speed = 7;
+
+        this.canMove = true;
+        this.shootTimer = 0;
+        this.shootRate = 20;
+
+        if (this.type == "bomber" || this.type == "strafer") {
+            this.img = random(enemyImages);
+        } else if (this.type === "bomber") {
+            this.img = sp;
+        } else if (this.type === "strafer") {
+            this.img = re;
+        }
     }
 
     draw() {
-        image(re, this.x, this.y, this.w, this.h);
+        image(this.img, this.x, this.y, this.w, this.h);
     }
 
     move() {
+        if(this.canMove == false) {
+            return;
+        }
+
         if(this.type == "bomber") {
             this.y += this.speed
             if(this.y > 500) {
@@ -257,8 +276,22 @@ class Enemy {
         }
     }
 
+    checkShoot() {
+        this.shootTimer ++;
+
+        if(this.shootTimer == this.shootRate) {
+            this.shootTimer = 0;
+            if(this.canMove) {
+                this.canMove = false;
+                this.shoot();
+            } else {
+                this.canMove = true;
+            }
+        }
+    }
+
     shoot() {
-        if(this.type = "strafer") {
+        if(this.type == "strafer") {
             let x = this.x + (this.w/2) - 10;
             let y = this.y + this.h;
             projectiles.push(new Projectile(x, y, "strafer"));
@@ -271,13 +304,13 @@ class Enemy {
             projectiles.push(p);
 
             let x2 = this.x + 20;
-            projectiles.push(new Projectiles(x2, y, "bomber"));
+            projectiles.push(new Projectile(x2, y, "bomber"));
         }
     }
 
     update() {
         this.draw();
         this.move();
-        this.shoot();
+        this.checkShoot();
     }
 }
