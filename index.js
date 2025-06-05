@@ -1,4 +1,4 @@
-//https://portal.codewithus.com/student/lectures/JavaScript/10    5-
+//https://portal.codewithus.com/student/lectures/JavaScript/10    5-37
 
 //Variables
 let player;
@@ -12,9 +12,6 @@ function setup() {
     player = new Player();
     projectiles = [];
     enemies = [];   
-    let test = new Projectile(250, 0, "strafer");
-    test.speed = 0.1;
-    projectiles.push(test);
 }
 
 function draw() {
@@ -22,14 +19,20 @@ function draw() {
     checkLevel();
     player.update();
     projectiles = projectiles.filter((p) => {
-        return p.y > -p.h && p.x > -p.w && p.x < 500 && p.y < 500; 
+        return p.y > -p.h && p.x > -p.w && p.x < 500 && p.y < 500 && p.active; 
     });
+
+    enemies = enemies.filter((e) => {
+        return e.active;
+    });
+
     for(let p of projectiles) {
         p.update();
     }
     for(e of enemies) {
         e.update();
     }
+    checkLevel();
     checkCollision();
 }
 
@@ -43,6 +46,17 @@ function checkCollision() {
             textAlign(CENTER, CENTER);
             text("GAME OVER", 250, 250);
             noLoop();
+        }
+        for(let p2 of projectiles) {
+            if (collision(p, p2) && p2.type == "player" && p.type != "player") {
+                p2.active = false;
+                p.active = false;
+            }
+        }
+    }
+    for (let e of enemies) {
+        for(let p of projectiles) {
+            //5-37
         }
     }
 }
@@ -173,6 +187,7 @@ window.addEventListener("keydown", function(e) {
 //projectile.js
 class Projectile {
     constructor(x, y, type) {
+        this.active = true;
         this.x = x;
         this.y = y;
 
@@ -225,6 +240,7 @@ class Projectile {
 //enemies.js
 class Enemy {
     constructor(x, y, type) {
+        this.active = true;
         this.x = x;
         this.y = y;
 
