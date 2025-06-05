@@ -47,6 +47,7 @@ function checkLevel() {
 //images.js
 // let playerImages = []
 let br, mi, re, sp, ed, ma, brod;
+let enemyImages;
 
 function preload() {
     // playerImages.push(loadImages("br.png"));
@@ -63,6 +64,7 @@ function preload() {
     ed = loadImage("ed.png")
     ma = loadImage("ma.png")
     brod = loadImage("brod.png")
+    enemyImages = [mi, re, sp, ed, ma];
 }
 
 //player.js
@@ -193,6 +195,8 @@ class Enemy {
 
         this.type = type;
 
+        this.image = enemyImages[floor(random(0, enemyImages.length))];
+
         this.w = 20;
         this.h = 20;
 
@@ -200,7 +204,7 @@ class Enemy {
     }
 
     draw() {
-        image(re, this.x, this.y, this.w, this.h);
+        image(this.image, this.x, this.y, this.w, this.h);
     }
 
     move() {
