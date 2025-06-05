@@ -201,6 +201,10 @@ class Enemy {
         this.h = 20;
 
         this.speed = 7;
+
+        this.canMove = true;
+        this.shootTimer = 0;
+        this.shootRate = 60;
     }
 
     draw() {
@@ -208,6 +212,9 @@ class Enemy {
     }
 
     move() {
+        if (!this.canMove) {
+            return;
+        }
         if(this.type == "bomber") {
             this.y += this.speed
             if(this.y > 500) {
@@ -245,9 +252,23 @@ class Enemy {
         }
     }
 
+    checkShoot() {
+        this.shootTimer ++;
+
+        if(this.shootTimer == this.shootRate) {
+            this.shootTimer = 0;
+            if(this.canMove) {
+                this.canMove = false;
+                this.shoot();
+            } else {
+                this.canMove = true;
+            }
+        }
+    }
+
     update() {
         this.draw();
         this.move();
-        this.shoot();
+        this.checkShoot();
     }
 }
