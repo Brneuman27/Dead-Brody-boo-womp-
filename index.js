@@ -11,7 +11,10 @@ function setup() {
     createCanvas(500, 500);
     player = new Player();
     projectiles = [];
-    enemies = [];    
+    enemies = [];  
+    let test = new Projectile(250, 0, "strafer");
+    test.speed = 0.1;
+    projectiles.push(test);
 }
 
 function draw() {
@@ -42,6 +45,17 @@ function checkLevel() {
             }
         }
     }
+}
+
+function collision(obj1, obj2) { 
+    if(obj1.x < obj2.x + obj2.w && 
+       obj1.x + obj1.w > obj2.x && 
+       obj1.y < obj2.y + obj2.h && 
+       obj1.y + obj1.h > obj2.y) { 
+        return true; 
+    } else { 
+        return false; 
+    } 
 }
 
 //images.js
