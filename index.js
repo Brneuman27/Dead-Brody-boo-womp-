@@ -1,4 +1,4 @@
-//https://portal.codewithus.com/student/lectures/JavaScript/10    4-17(current step)
+//https://portal.codewithus.com/student/lectures/JavaScript/10    4-25(current step)
 
 //Variables
 let player;
