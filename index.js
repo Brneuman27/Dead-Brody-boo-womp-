@@ -36,7 +36,7 @@ function checkLevel() {
         for(let i = 0; i < level; i++) {
             let coinFlip = round(random(0, 1));
             if(coinFlip === 0) {
-            enemies.push(new Enemy(random(0, 450), +100, "bomber"));
+            enemies.push(new Enemy(random(0, 450), -100, "bomber"));
             } else {
                 enemies.push(new Enemy(600, random(0, 350), "strafer"));
             }
