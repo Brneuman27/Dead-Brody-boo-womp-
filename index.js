@@ -1,4 +1,4 @@
-//https://portal.codewithus.com/student/lectures/JavaScript/10    4-25(current step)
+//https://portal.codewithus.com/student/lectures/JavaScript/10    3-8(enemy randomiser)&4-9(random bullet), 4-17(current step)
 
 //Variables
 let player;
@@ -11,10 +11,10 @@ function setup() {
     createCanvas(500, 500);
     player = new Player();
     projectiles = [];
-    enemies = [];  
+    enemies = [];   
     let test = new Projectile(250, 0, "strafer");
     test.speed = 0.1;
-    projectiles.push(test);
+    projectiles.push(text);
 }
 
 function draw() {
@@ -27,12 +27,25 @@ function draw() {
     for(let p of projectiles) {
         p.update();
     }
-    for(let e of enemies) {
+    for(e of enemies) {
         e.update();
     }
+    checkCollision();
 }
 
 //Other Functions
+function checkCollision() {
+    for(let p of projectiles) {
+        if(collision(player, p)) {
+            fill(255);
+            noStroke();
+            textSize(72);
+            textAlign(CENTER, CENTER);
+            text("GAME OVER", 250, 250);
+        }
+    }
+}
+
 function checkLevel() {
     if(enemies.length === 0) {
         level += 1;
@@ -49,19 +62,18 @@ function checkLevel() {
 
 function collision(obj1, obj2) { 
     if(obj1.x < obj2.x + obj2.w && 
-       obj1.x + obj1.w > obj2.x && 
+       obj1.x + obj1.w > obj2.x &&
        obj1.y < obj2.y + obj2.h && 
        obj1.y + obj1.h > obj2.y) { 
         return true; 
     } else { 
         return false; 
     } 
-}
+} 
 
 //images.js
 // let playerImages = []
 let br, mi, re, sp, ed, ma, brod;
-let enemyImages;
 
 function preload() {
     // playerImages.push(loadImages("br.png"));
@@ -78,7 +90,6 @@ function preload() {
     ed = loadImage("ed.png")
     ma = loadImage("ma.png")
     brod = loadImage("brod.png")
-    enemyImages = [mi, re, sp, ed, ma];
 }
 
 //player.js
@@ -195,8 +206,15 @@ class Projectile {
         }
     }
 
+    drawColliders() {
+        noFill();
+        stroke(255);
+        rect(this.x, this.y, this.w, this.h);
+    }
+
     update() {
         this.draw();
+        this.drawColliders();
         this.move();
     }
 }
@@ -209,26 +227,17 @@ class Enemy {
 
         this.type = type;
 
-        this.image = enemyImages[floor(random(0, enemyImages.length))];
-
         this.w = 20;
         this.h = 20;
 
         this.speed = 7;
-
-        this.canMove = true;
-        this.shootTimer = 0;
-        this.shootRate = 60;
     }
 
     draw() {
-        image(this.image, this.x, this.y, this.w, this.h);
+        image(re, this.x, this.y, this.w, this.h);
     }
 
     move() {
-        if (!this.canMove) {
-            return;
-        }
         if(this.type == "bomber") {
             this.y += this.speed
             if(this.y > 500) {
@@ -249,7 +258,7 @@ class Enemy {
     }
 
     shoot() {
-        if(this.type == "strafer") {
+        if(this.type = "strafer") {
             let x = this.x + (this.w/2) - 10;
             let y = this.y + this.h;
             projectiles.push(new Projectile(x, y, "strafer"));
@@ -262,27 +271,13 @@ class Enemy {
             projectiles.push(p);
 
             let x2 = this.x + 20;
-            projectiles.push(new Projectile(x2, y, "bomber"));
-        }
-    }
-
-    checkShoot() {
-        this.shootTimer ++;
-
-        if(this.shootTimer == this.shootRate) {
-            this.shootTimer = 0;
-            if(this.canMove) {
-                this.canMove = false;
-                this.shoot();
-            } else {
-                this.canMove = true;
-            }
+            projectiles.push(new Projectiles(x2, y, "bomber"));
         }
     }
 
     update() {
         this.draw();
         this.move();
-        this.checkShoot();
+        this.shoot();
     }
 }
