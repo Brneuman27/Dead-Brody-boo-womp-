@@ -1,38 +1,61 @@
-//https://portal.codewithus.com/student/lectures/JavaScript/10    5-37
+//https://portal.codewithus.com/student/lectures/JavaScript/10    6-
 
 //Variables
 let player;
 let projectiles;
 let enemies;
-let level = 0;
+let level;
+let gameState = "start";
+let selectedImage = null;
+let allCharacters = [];
+let score;
+let highScore = 0;
 
 //Main Functions
 function setup() {
     createCanvas(500, 500);
     player = new Player();
     projectiles = [];
-    enemies = [];   
+    enemies = [];  
+    
+    level = 0;
+    playing = true;
+    score = 0;
 }
 
 function draw() {
     background(0);
+
+    if (gameState === "start") {
+        drawStartScreen();
+        return;
+    }
+
+    if (gameState === "gameover") {
+        fill(255);
+        textSize(72);
+        textAlign(CENTER, CENTER);
+        text("GAME OVER", 250, 250);
+        return;
+    }
+
     checkLevel();
     player.update();
+
     projectiles = projectiles.filter((p) => {
         return p.y > -p.h && p.x > -p.w && p.x < 500 && p.y < 500 && p.active; 
     });
 
-    enemies = enemies.filter((e) => {
-        return e.active;
-    });
+    enemies = enemies.filter((e) => e.active);
 
-    for(let p of projectiles) {
+    for (let p of projectiles) {
         p.update();
     }
-    for(e of enemies) {
+
+    for (let e of enemies) {
         e.update();
     }
-    checkLevel();
+
     checkCollision();
 }
 
@@ -40,23 +63,33 @@ function draw() {
 function checkCollision() {
     for(let p of projectiles) {
         if(p.type !== "player" && collision(player, p)) {
+            gameState = "gameover";
+            playing = false;
+
+            background(0);
             fill(255);
-            noStroke();
             textSize(72);
             textAlign(CENTER, CENTER);
-            text("GAME OVER", 250, 250);
-            noLoop();
-        }
-        for(let p2 of projectiles) {
-            if (collision(p, p2) && p2.type == "player" && p.type != "player") {
-                p2.active = false;
-                p.active = false;
-            }
+            text("GAME OVER", width / 2, height / 2);
+
+            noLoop(); 
+            return;
         }
     }
+
     for (let e of enemies) {
-        for(let p of projectiles) {
-            //5-37
+        if (collision(player, e)) {
+            gameState = "gameover";
+            playing = false;
+
+            background(0);
+            fill(255);
+            textSize(72);
+            textAlign(CENTER, CENTER);
+            text("GAME OVER", width / 2, height / 2);
+
+            noLoop();
+            return;
         }
     }
 }
@@ -86,18 +119,66 @@ function collision(obj1, obj2) {
     } 
 } 
 
+function drawStartScreen() {
+    fill(255);
+    textSize(32);
+    textAlign(CENTER, TOP);
+    text("Choose Your Character", width / 2, 20);
+
+    textSize(14);
+    for (let i = 0; i < allCharacters.length; i++) {
+        let img = allCharacters[i];
+        let imgX = 50 + i * 70;
+        let imgY = 100;
+
+        let isHovering = mouseX > imgX && mouseX < imgX + 50 && mouseY > imgY && mouseY < imgY + 50;
+
+        image(img, imgX, imgY, 50, 50);
+
+        if (isHovering) {
+            noFill();
+            stroke(31, 133, 207);
+            strokeWeight(2);
+            rect(imgX, imgY, 50, 50);
+        }
+
+        fill(200);
+        textAlign(CENTER, TOP);
+        text(characterNames[i], imgX + 25, imgY + 55);
+    }
+}
+
+function mousePressed() {
+    if (gameState === "start") {
+        for (let i = 0; i < allCharacters.length; i++) {
+            let imgX = 50 + i * 70;
+            if (mouseX > imgX && mouseX < imgX + 50 &&
+                mouseY > 100 && mouseY < 150) {
+
+                selectedImage = allCharacters[i];
+
+                enemyImages = allCharacters.filter(img => img !== selectedImage);
+
+                player = new Player();
+                gameState = "playing";
+                playing = true;
+                loop();  
+                break;
+            }
+        }
+    } else if (gameState === "gameover") {
+        
+        setup();          
+        gameState = "start";  
+        playing = true;
+        loop();
+    }
+}
+
 //images.js
-// let playerImages = []
-let br, mi, re, sp, ed, ma, brod;
+let br, mi, re, sp, ed, ma, brod, bro;
 
 function preload() {
-    // playerImages.push(loadImages("br.png"));
-    // playerImages.push(loadImages("re.png"));
-    // playerImages.push(loadImages("sp.png"));
-    // playerImages.push(loadImages("ed.png"));
-    // playerImages.push(loadImages("mi.png"));
-    // playerImages.push(loadImages("ma.png"));
-
     br = loadImage("br.png")
     mi = loadImage("mi.png")
     re = loadImage("re.png")
@@ -105,9 +186,30 @@ function preload() {
     ed = loadImage("ed.png")
     ma = loadImage("ma.png")
     brod = loadImage("brod.png")
+    bro = loadImage("bro.png")
 
-    enemyImages = [mi, re, sp, ed, ma];
-}
+    allCharacters = [br, mi, re, sp, ed, ma];
+    characterNames = ["br", "mi", "re", "sp", "ed", "ma"];
+
+}   
+
+    function enemyUpdate() {
+        enemies = enemies.filter((e) => {
+            return e.active;
+        });
+        for(e of enemies) {
+            e.update();
+        }
+    }
+
+    function projectileUpdate() {
+         projectiles = projectiles.filter((p) => {
+        return p.y > -p.h && p.x > -p.w && p.x < 500 && p.y < 500 && p.active; 
+    });
+        for(let p of projectiles) {
+            p.update();
+        }
+    }
 
 //player.js
 class Player {
@@ -124,8 +226,11 @@ class Player {
         this.shootRate = 10;
     }
     draw() {
-        image(br, this.x, this.y, this.w, this.h);
-        //images(playerImage, this.x, this.y, this.w, this.h);
+        if (selectedImage) {
+            image(selectedImage, this.x, this.y, this.w, this.h);
+        } else {
+            image(br, this.x, this.y, this.w, this.h);
+        }
     }
 
     move() {
@@ -201,11 +306,7 @@ class Projectile {
 
     draw() {
         if(this.type == "player") {
-            fill(255, 0, 0);
-            stroke(255, 0, 0);
-            textSize(18);
-            textAlign(CENTER, CENTER);
-            text("|", this.x, this.y, this.w, this.h);
+            image(bro, this.x, this.y, this.w, this.h);
         }
         if(this.type == "strafer" || this.type == "bomber") {
             image(brod, this.x, this.y, this.w, this.h);
@@ -253,7 +354,7 @@ class Enemy {
 
         this.canMove = true;
         this.shootTimer = 0;
-        this.shootRate = 20;
+        this.shootRate = 45;
 
         if (this.type == "bomber" || this.type == "strafer") {
             this.img = random(enemyImages);
