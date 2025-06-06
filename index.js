@@ -202,7 +202,7 @@ function checkLevel() {
             if (coinFlip === 0) {
                 enemies.push(new Enemy(random(0, adjustedWidth), -100, "bomber"));
             } else {
-                enemies.push(new Enemy(adjustedWidth + 100, random(0, adjustedHeight  - 150), "strafer"));
+                enemies.push(new Enemy(adjustedWidth + 100, random(0, adjustedHeight  - 250), "strafer"));
             }
         }
     }
@@ -480,7 +480,7 @@ class Enemy {
             this.y += this.speed;
             if(this.y > adjustedHeight) {
                 this.y = -100;
-                this.x = random(0, adjustedWidth - this.w);
+                this.x = random(200, adjustedWidth - 300 - this.w);
             }
         }
         if(this.type == "strafer") {
