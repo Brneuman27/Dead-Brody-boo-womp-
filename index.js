@@ -334,8 +334,8 @@ function preload() {
 //player.js
 class Player {
     constructor() {
-    this.w = 80;
-    this.h = 80;
+    this.w = 120;
+    this.h = 120;
     this.x = (adjustedWidth / 2) - (this.w / 2);
     this.y = adjustedHeight  - this.h - 10;
     this.speed = 5;
@@ -457,8 +457,8 @@ class Enemy {
 
         this.type = type;
 
-        this.w = 40;
-        this.h = 40;
+        this.w = 100;
+        this.h = 100;
 
         this.speed = 7;
 
@@ -539,8 +539,8 @@ class Boss {
     constructor(x, y) {
         this.x = x;
         this.y = y;
-        this.w = 160;
-        this.h = 160;
+        this.w = 200;
+        this.h = 200;
         this.hp = 20;
         this.active = true;
         this.speed = 2;
