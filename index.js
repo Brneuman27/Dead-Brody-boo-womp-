@@ -1,5 +1,3 @@
-//https://portal.codewithus.com/student/lectures/JavaScript/10    7-
-
 //Variables
 let player;
 let projectiles;
@@ -90,13 +88,11 @@ function draw() {
         let barX = (adjustedWidth / 2) - (barWidth / 2);
         let barY = adjustedHeight - 30;
 
-        // Draw boss name above health bar
         fill(255);
         textSize(20);
         textAlign(CENTER, BOTTOM);
         text(boss.name, adjustedWidth / 2, barY - 10);
 
-        // Draw boss health bar
         fill(255, 0, 0);
         rect(barX, barY, map(boss.hp, 0, 20, 0, barWidth), barHeight);
         noFill();
@@ -107,7 +103,6 @@ function draw() {
 
 //Other Functions
 function checkCollision() {
-    // Player projectiles hit enemies
     for (let p of projectiles) {
         if (p.type === "player") {
             for (let e of enemies) {
@@ -124,7 +119,6 @@ function checkCollision() {
         }
     }
 
-    // Enemy projectiles hit player
     for (let p of projectiles) {
         if (p.type !== "player" && collision(player, p)) {
             gameState = "gameover";
@@ -141,7 +135,6 @@ function checkCollision() {
         }
     }
 
-    // Enemies hit player
     for (let e of enemies) {
         if (collision(player, e)) {
             gameState = "gameover";
@@ -157,10 +150,7 @@ function checkCollision() {
             return;
         }
     }
-
-    // Boss fight collisions
     if (bossFight && boss && boss.active) {
-        // Player projectiles hit boss
         for (let p of projectiles) {
             if (p.type === "player" && collision(p, boss)) {
                 p.active = false;
@@ -174,7 +164,6 @@ function checkCollision() {
             }
         }
 
-        // Boss hits player
         if (collision(player, boss)) {
             gameState = "gameover";
             playing = false;
@@ -183,7 +172,6 @@ function checkCollision() {
         }
     }
 
-    // NEW: Player projectiles collide with enemy projectiles
     for (let i = 0; i < projectiles.length; i++) {
         let p1 = projectiles[i];
         if (p1.type === "player" && p1.active) {
@@ -322,7 +310,6 @@ function preload() {
         { img: ma, name: "ma" }
     ];
 
-    // You’ll also want enemy images (excluding selected player)
     characterNames = ["br", "mi", "re", "sp", "ed", "ma"];
 } 
 
@@ -560,7 +547,6 @@ class Boss {
         this.shootTimer = 0;
         this.shootRate = 30;
 
-        // Select from enemyImages which now contains objects with both img and name
         let character = random(enemyImages);
         this.img = character.img;
         this.name = character.name;
