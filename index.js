@@ -189,7 +189,7 @@ function checkCollision() {
 }
 
 function checkLevel() {
-    if (!bossFight && level === 3 && enemies.length === 0) {
+    if (!bossFight && level % 5 === 0 && level !== 0 && enemies.length === 0) {
         boss = new Boss(200, 50);
         bossFight = true;
         return;
@@ -202,7 +202,7 @@ function checkLevel() {
             if (coinFlip === 0) {
                 enemies.push(new Enemy(random(0, adjustedWidth), -100, "bomber"));
             } else {
-                enemies.push(new Enemy(adjustedWidth + 100, random(0, adjustedHeight  - 250), "strafer"));
+                enemies.push(new Enemy(adjustedWidth + 100, random(0, adjustedHeight - 250), "strafer"));
             }
         }
     }
