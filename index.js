@@ -338,7 +338,7 @@ class Player {
     this.h = 120;
     this.x = (adjustedWidth / 2) - (this.w / 2);
     this.y = adjustedHeight  - this.h - 10;
-    this.speed = 5;
+    this.speed = 7;
     this.canShoot = true;
     this.shootTimer = 0;
     this.shootRate = 10;
