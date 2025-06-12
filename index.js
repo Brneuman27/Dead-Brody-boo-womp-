@@ -155,7 +155,7 @@ function checkCollision() {
             if (p.type === "player" && collision(p, boss)) {
                 p.active = false;
                 boss.hp--;
-                if (boss.hp <= 0 || playing = false) {
+                if (boss.hp <= 0 || playing == false) {
                     boss.active = false;
                     bossFight = false;
                     level++;
